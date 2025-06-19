@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Air Writing - Web App</title>
+    <script>
+        function clearCanvas() {
+            fetch('/clear_canvas', { method: 'POST' });
+        }
+        function saveCanvas() {
+            fetch('/save_canvas', { method: 'POST' })
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = 'airwriting.png';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                });
+        }
+    </script>
+</head>
+<body style="text-align: center; background-color: #f0f0f0;">
+    <h1>🖐️ Air Writing using Finger Tracking</h1>
+    <img src="{{ url_for('video_feed') }}" width="640" height="480" />
+    <div style="margin-top: 20px;">
+        <button onclick="clearCanvas()">Clear</button>
+        <button onclick="saveCanvas()">Save</button>
+    </div>
+    <p>Bring your index finger up and write in the air.</p>
+</body>
+</html>
